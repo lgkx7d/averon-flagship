@@ -1,26 +1,294 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #080808;
+  --foreground: #F0EFEB;
+  --obsidian: #080808;
+  --matte: #0B0B0B;
+  --charcoal: #161616;
+  --graphite: #292929;
+  --concrete: #777777;
+  --silver: #C8C8C8;
+  --offwhite: #F0EFEB;
+
+  /* Typography Scale Tokens (Responsive fluid clamp) */
+  --type-monumental: clamp(6rem, 16vw, 18rem);
+  --type-serif-oversized: clamp(5rem, 12vw, 15rem);
+  --type-section: clamp(3.5rem, 8vw, 10rem);
+  --type-category: clamp(2.5rem, 6vw, 7rem);
+  --type-product: clamp(1.75rem, 3vw, 3.5rem);
+  --type-body: clamp(0.95rem, 1.1vw, 1.125rem);
+  --type-technical: clamp(0.65rem, 0.75vw, 0.85rem);
+
+  /* Font Families */
+  --font-monumental-family: var(--font-monumental), 'Oswald', sans-serif;
+  --font-serif-family: var(--font-serif), 'Bodoni Moda', serif;
+  --font-interface-family: var(--font-interface), 'Space Grotesk', sans-serif;
+  --font-mono-family: var(--font-mono), 'Space Mono', monospace;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-obsidian: #080808;
+  --color-matte: #0B0B0B;
+  --color-charcoal: #161616;
+  --color-graphite: #292929;
+  --color-concrete: #777777;
+  --color-silver: #C8C8C8;
+  --color-offwhite: #F0EFEB;
+
+  --font-monumental: var(--font-monumental), sans-serif;
+  --font-serif: var(--font-serif), serif;
+  --font-sans: var(--font-interface), sans-serif;
+  --font-mono: var(--font-mono), monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Global typography resets */
+html {
+  background-color: #080808;
+  color: #F0EFEB;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #080808;
+  color: #F0EFEB;
+  font-family: var(--font-interface-family);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #F0EFEB;
+  color: #080808;
+}
+
+/* ========================================================
+   EXPERIMENTAL FASHION TYPOGRAPHY UTILITIES
+   ======================================================== */
+
+/* TYPEFACE 01: MONUMENTAL CONDENSED GROTESK */
+.type-monumental {
+  font-family: var(--font-monumental-family);
+  font-size: var(--type-monumental);
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.type-section-title {
+  font-family: var(--font-monumental-family);
+  font-size: var(--type-section);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.type-category-title {
+  font-family: var(--font-monumental-family);
+  font-size: var(--type-category);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* TYPEFACE 02: HIGH-FASHION SERIF */
+.type-serif-oversized {
+  font-family: var(--font-serif-family);
+  font-size: var(--type-serif-oversized);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.type-serif-headline {
+  font-family: var(--font-serif-family);
+  font-style: italic;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+/* TYPEFACE 03: MODERN INTERFACE SANS */
+.type-product-title {
+  font-family: var(--font-interface-family);
+  font-size: var(--type-product);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.type-body {
+  font-family: var(--font-interface-family);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+
+/* TYPEFACE 04: TECHNICAL MONOSPACE */
+.type-technical {
+  font-family: var(--font-mono-family);
+  font-size: var(--type-technical);
+  line-height: 1.4;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ========================================================
+   TYPOGRAPHIC MOTION & HOVER UTILITIES
+   ======================================================== */
+
+/* Masked line / word reveal */
+.type-reveal-line {
+  display: block;
+  overflow: hidden;
+}
+
+.type-reveal-word {
+  display: inline-block;
+  transform: translateY(115%);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.type-reveal-active .type-reveal-word {
+  transform: translateY(0%);
+}
+
+/* High Fashion Rolling Text Hover */
+.type-hover-roll {
+  display: inline-flex;
+  flex-direction: column;
+  height: 1.25em;
+  overflow: hidden;
+  position: relative;
+}
+
+.type-hover-roll span {
+  display: block;
+  transform: translateY(0%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.type-hover-roll:hover span {
+  transform: translateY(-100%);
+}
+
+/* Underline expansion */
+.type-underline-expand {
+  position: relative;
+}
+
+.type-underline-expand::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 1px;
+  background-color: currentColor;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.type-underline-expand:hover::after {
+  width: 100%;
+}
+
+/* Overlapping typography text outline (Ghost Stroke) */
+.type-ghost-stroke {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  color: transparent;
+  transition: -webkit-text-stroke 0.3s ease, color 0.3s ease;
+}
+
+.type-ghost-stroke:hover {
+  -webkit-text-stroke: 1px #ffffff;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+/* Chrome metallic sweep */
+@keyframes chromeSweep {
+  0% {
+    transform: translateX(-150%) skewX(-25deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(250%) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
+.animate-chrome-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-chrome-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(200, 200, 200, 0.15) 70%,
+    transparent 100%
+  );
+  animation: chromeSweep 4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  pointer-events: none;
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080808;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #292929;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777777;
+}
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* Custom cursor */
+@media (pointer: fine) {
+  .has-custom-cursor {
+    cursor: none;
+  }
+  .has-custom-cursor * {
+    cursor: none;
+  }
 }
