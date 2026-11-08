@@ -23,6 +23,9 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
     } else {
       document.body.style.overflow = '';
     }
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen, playChime]);
 
   if (!isOpen) return null;

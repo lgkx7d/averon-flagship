@@ -10,6 +10,11 @@ export default function HeroCanvas() {
     const container = mountRef.current;
     if (!container) return;
 
+    // Mobile performance optimization: do not mount heavy WebGL scene on mobile
+    if (window.innerWidth < 768) {
+      return;
+    }
+
     // Check prefers-reduced-motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return;

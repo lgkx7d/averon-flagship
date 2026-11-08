@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, ShoppingBag, ShieldCheck, Ruler, Check, Share2 } from 'lucide-react';
@@ -24,9 +24,27 @@ export default function ProductDetailClient({
   const [selectedSizeIndex, setSelectedSizeIndex] = useState<number>(0);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState<boolean>(false);
   const [isAdded, setIsAdded] = useState<boolean>(false);
+  const touchStartX = useRef<number>(0);
 
   const { addItem, openCart } = useCart();
   const { playHover, playChime } = useSound();
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(diff) > 40 && product.images.length > 1) {
+      if (diff < 0) {
+        // Next image
+        setSelectedImageIndex((prev) => (prev + 1) % product.images.length);
+      } else {
+        // Prev image
+        setSelectedImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+      }
+    }
+  };
 
   const handleAddToBag = () => {
     playChime();
@@ -94,9 +112,11 @@ export default function ProductDetailClient({
             ))}
           </div>
 
-          {/* Large Hero Stage View */}
+          {/* Large Hero Stage View (Touch Swipe on Mobile, Zoom/Hover on Desktop) */}
           <div
-            className="relative flex-1 aspect-[3/4] bg-[#0B0B0B] border border-white/15 overflow-hidden group shadow-2xl"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className="relative flex-1 aspect-[3/4] bg-[#0B0B0B] border border-white/15 overflow-hidden group shadow-2xl touch-pan-y"
             data-cursor="VIEW"
           >
             <Image
@@ -116,10 +136,18 @@ export default function ProductDetailClient({
               </div>
             )}
 
+            {/* Mobile Swipe / Image Indicator */}
+            {product.images.length > 1 && (
+              <div className="md:hidden absolute top-4 right-4 px-2 py-0.5 bg-black/80 border border-white/20 text-[9px] font-mono text-white">
+                0{selectedImageIndex + 1} / 0{product.images.length}
+              </div>
+            )}
+
             {/* Editorial Watermark */}
             <div className="absolute bottom-4 left-4 right-4 p-3 bg-[#080808]/90 border border-white/10 backdrop-blur-md flex items-center justify-between text-[9px] font-mono text-[#C8C8C8] uppercase tracking-widest">
               <span>AVERON ARCHIVE SPECIMEN</span>
-              <span>100% AUTHENTIC PROTOTYPE</span>
+              <span className="hidden sm:inline">100% AUTHENTIC PROTOTYPE</span>
+              <span className="sm:hidden text-white">SWIPE ↔</span>
             </div>
           </div>
         </div>
@@ -307,6 +335,26 @@ export default function ProductDetailClient({
           </div>
         </div>
       )}
+
+      {/* Mobile Sticky Add to Bag Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 w-full p-4 bg-[#080808]/95 backdrop-blur-md border-t border-white/15 z-40 flex items-center justify-between gap-3 shadow-2xl">
+        <div className="min-w-0">
+          <div className="text-[10px] font-mono text-[#777777] uppercase truncate">
+            {product.name}
+          </div>
+          <div className="text-sm font-mono font-bold text-white">
+            {product.formattedPrice}
+          </div>
+        </div>
+
+        <button
+          onClick={handleAddToBag}
+          className="px-5 py-3 bg-white text-black font-mono text-xs font-bold tracking-widest uppercase active:scale-[0.96] transition-transform flex items-center gap-2 flex-shrink-0 shadow-lg"
+        >
+          <ShoppingBag className="w-3.5 h-3.5" />
+          <span>{isAdded ? 'ADDED' : 'ADD TO BAG'}</span>
+        </button>
+      </div>
 
       {/* Size Guide Modal */}
       <SizeGuideModal

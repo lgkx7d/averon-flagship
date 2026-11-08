@@ -89,22 +89,22 @@ export default function Header() {
 
           {/* Right: Actions (Search, Sound, Bag, Menu) */}
           <div className="flex items-center gap-4 sm:gap-6 text-[11px] font-mono tracking-widest uppercase">
-            {/* Search Trigger */}
+            {/* Search Trigger (Desktop/Tablet) */}
             <button
               onClick={openSearch}
-              className="flex items-center gap-2 text-[#C8C8C8] hover:text-white transition-colors py-1 group"
+              className="hidden sm:flex items-center gap-2 text-[#C8C8C8] hover:text-white transition-colors py-1 group"
               aria-label="Open search"
             >
               <Search className="w-4 h-4" />
-              <span className="hidden sm:inline">SEARCH</span>
+              <span>SEARCH</span>
             </button>
 
-            {/* Sound Toggle */}
+            {/* Sound Toggle (Desktop/Tablet) */}
             <button
               onClick={() => {
                 toggleSound();
               }}
-              className="flex items-center gap-1.5 text-[#777777] hover:text-white transition-colors py-1"
+              className="hidden sm:flex items-center gap-1.5 text-[#777777] hover:text-white transition-colors py-1"
               title={isSoundOn ? 'Sound: Active (Press M to mute)' : 'Sound: Muted (Press M to unmute)'}
               aria-label="Toggle ambient sound"
             >

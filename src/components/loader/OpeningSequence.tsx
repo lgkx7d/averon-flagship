@@ -24,6 +24,7 @@ export default function OpeningSequence({ onComplete }: OpeningSequenceProps) {
     // Check if user has already visited in this session
     const hasVisited = sessionStorage.getItem('averon_entered');
     const isReturning = Boolean(hasVisited);
+    const isMobile = window.innerWidth < 768;
 
     let currentProgress = 0;
     let isFinished = false;
@@ -73,13 +74,13 @@ export default function OpeningSequence({ onComplete }: OpeningSequenceProps) {
       };
     });
 
-    // Fallback safety timeout: 2.8s for first visit, 0.9s for returning
+    // Fallback safety timeout: brief on mobile (1.4s), returning (0.6s), desktop (2.6s)
     const safetyTimeout = setTimeout(() => {
       if (!isFinished) {
         setProgress(100);
         completeSequence();
       }
-    }, isReturning ? 900 : 2800);
+    }, isReturning ? 600 : isMobile ? 1400 : 2600);
 
     const completeSequence = () => {
       if (isFinished) return;
@@ -157,7 +158,8 @@ export default function OpeningSequence({ onComplete }: OpeningSequenceProps) {
           }}
           className="hover:text-white transition-colors border border-white/20 px-3 py-1 bg-white/5"
         >
-          [ESC] SKIP INTRO
+          <span className="hidden sm:inline">[ESC] </span>
+          <span>SKIP INTRO</span>
         </button>
       </div>
 
